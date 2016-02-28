@@ -32,11 +32,11 @@ function [net, info] = mnist_train()
     
     trainOpts.batchSize = 10 ;
     trainOpts.numEpochs = 40 ;
-    trainOpts.continue = true ;
+    trainOpts.continue = false ;
     trainOpts.useGpu = false ;
     trainOpts.learningRate = 0.03 ;
     trainOpts.weightDecay = 0.1 ;
-    trainOpts.momentum = 0 ;
+    trainOpts.momentum = 0.0 ;
     trainOpts.expDir = 'data/mnist-experiment' ;
 
     net = initializeNetwork();

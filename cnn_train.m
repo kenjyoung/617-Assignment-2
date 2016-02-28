@@ -14,7 +14,7 @@ opts.learningRate = 0.001 ;
 opts.continue = false ;
 opts.expDir = fullfile('data','exp') ;
 opts.conserveMemory = false ;
-opts.sync = true ;
+opts.sync = false ;
 opts.prefetch = false ;
 opts.weightDecay = 0.0005 ;
 opts.momentum = 0.9 ;
@@ -195,7 +195,6 @@ for epoch=1:opts.numEpochs
 
     net.layers{end}.class = labels ;
     res = vl_simplenn(net, im, [], res, ...
-      'disableDropout', false, ...
       'conserveMemory', opts.conserveMemory, ...
       'sync', opts.sync) ;
 
