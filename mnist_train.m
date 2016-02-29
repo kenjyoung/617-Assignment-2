@@ -31,8 +31,8 @@ function [nets, info] = mnist_train()
     lambda = 0.1 ;
     %this eta differs from the one given by the source network
     %the eta they provided was found to not work as well
-    eta = 0.001 ;
-    num_nets = 5;
+    eta = 0.03 ;
+    num_nets = 5 ;
     
     imdb.images = image_data;
     trainOpts.batchSize = 10 ;
@@ -40,19 +40,18 @@ function [nets, info] = mnist_train()
     trainOpts.continue = false ;
     trainOpts.useGpu = false ;
     trainOpts.learningRate = eta;
+    %lambda multiplied to agree with definition used in source network
     trainOpts.weightDecay = lambda*(trainOpts.batchSize/size(images,3));
+    %source network does not use momentum
     trainOpts.momentum = 0.0 ;
     trainOpts.expDir = 'data/mnist-experiment' ;
     
     for i=1:num_nets
         net = initializeNetwork();
-        [net,info] = cnn_train(net, imdb, @getBatch, trainOpts);
+        [net,~] = cnn_train(net, imdb, @getBatch, trainOpts);
         nets(i) = net;
         save nets
     end
-    net = initializeNetwork();
-    [net,info] = cnn_train(net, imdb, @getBatch, trainOpts);
-    save net
 end
 
 function [images, labels] = getBatch(imdb, batch)
