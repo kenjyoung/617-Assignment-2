@@ -31,7 +31,7 @@ function [nets, info] = mnist_train()
     lambda = 0.1 ;
     %this eta differs from the one given by the source network
     %the eta they provided was found to not work as well
-    eta = 0.03 ;
+    eta = 0.001 ;
     num_nets = 5 ;
     
     imdb.images = image_data;
