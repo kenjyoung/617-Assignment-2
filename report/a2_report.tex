@@ -1,0 +1,58 @@
+\documentclass[a4paper,12pt]{article}
+\title{617 Assignment 2 report}
+\author{Kenny Young}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{bigints}
+\usepackage{graphicx}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Method}
+A deep learning architecture closely matching that found in \cite{SRC} was implemented in MatConvNet and trained on the MNIST data set (60,000 training images of handwritten digits). To use the code first place all the files from \cite{MNIST} in a directory named ``data'' in this directory. To run the training process simply call mnist\_train, this will take around one day as it trains 5 networks over a 5 times expanded version of the data set, each for 40 epochs.
+
+The network architecture consisted of the following layers in order of application:
+\begin{itemize}
+\item 5x5 convolution with 20 channels (no activation function)
+\item 2x2 max pooling layer followed by relu activation
+\item 5x5 convolution with 40 channels (no activation function)
+\item 2x2 max pooling layer followed by relu activation
+\item Fully connected layer over remaining 4x4 output with 1000 outputs followed by relu activation and dropout with $p=0.5$
+\item Second fully connected layer with 1000 outputs followed by relu activation and dropout with $p=0.5$
+\item Softmax output layer with 10 outputs corresponding to the 10 MNIST digit classes
+\end{itemize}
+
+All convolutional layers had stride 1 and no padding was used. The training data was augmented to 5 times the size by offseting each example by a single pixel in each cardinal direction. Training proceeded for 40 epochs with weight-decay of 0.1 and learning rate of 0.001. This learning rate is the one notable difference between the procedure outlined in \cite{SRC} and the one applied here. The learning rate used in \cite{SRC} was given as 0.03, however this learning rate was found to be too high in that it produced essentially no noticable improvement to the network after running for a full epoch, while the lower one actually used resulted in error a validation error of only 1.5\% after one epoch, and excellent results after the full 40.
+
+The script cnn\_train.m found in the MatConvNet examples was used to train the networks used with momentum set to 0 in agreement with \cite{SRC}. 5 networks all matching the above description were trained in total and their average prediction taken as the prediction at test time, as specified in \cite{SRC}.
+
+\section{Results}
+
+
+\section{Discussion}
+
+
+\begin{thebibliography}{10}
+
+\bibitem{SRC}
+Michael Nielsen, Deep Learning, chapter 6,
+
+http://neuralnetworksanddeeplearning.com/chap6.html
+
+\bibitem{MNIST}
+Yann LeCun Homepage, \textit{The MMIST Database},
+
+http://yann.lecun.com/exdb/mnist/
+
+Date accessed: February 16, 2016
+
+
+
+
+\end{thebibliography}
+
+
+
+\end{document}
