@@ -50,7 +50,7 @@ function [nets, info] = mnist_train()
         net = initializeNetwork();
         [net,~] = cnn_train(net, imdb, @getBatch, trainOpts);
         nets(i) = net;
-        save nets
+        save networks.mat nets
     end
 end
 
