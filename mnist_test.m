@@ -16,10 +16,18 @@ function [accuracy] = mnist_test(nets)
           'sync', true);
         scores(:,:,:,i)=res(end).x;
     end
-    score = mean(scores,4);
-    [~,class] = max(score,[],1);
+    [~,class] = max(scores,[],1);
+    for i=1:size(nets,2)
+        net_class = class(:,:,:,i);
+        net_class = reshape(net_class,size(labels));
+        net_class = net_class-1;
+        net_accuracy(i) = nnz(net_class==labels)/size(labels,1);
+    end
+    fprintf('Individual accuracy: (%.4f,%.4f,%.4f,%.4f,%.4f)\n', net_accuracy);
+    class = mode(class,4);
     class = reshape(class,size(labels));
     class = class-1;
     accuracy = nnz(class==labels)/size(labels,1);
-    fprintf('Test set accuracy: %f\n',accuracy);
+    fprintf('Overall test set accuracy: %.4f\n',accuracy);
+    
 end
