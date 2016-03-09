@@ -11,7 +11,7 @@
 \maketitle
 \tableofcontents
 \section{Method}
-A deep learning architecture closely matching that found in \cite{SRC} was implemented in MatConvNet and trained on the MNIST data set (60,000 training images of handwritten digits). The versions of matconvnet and vlfeat used are included in this directory to ensure consistency. To use the code first place all the files from \cite{MNIST} in a directory named ``data'' in this directory. To run the training process simply call mnist\_train, this will take around one day as it trains 5 networks over a 5 times expanded version of the data set, each for 40 epochs. Training is done using 95\% of expanded MNIST dataset, with 5\% withheld for validation, which was run after each epoch.
+A deep neural network architecture closely matching that found in \cite{SRC} was implemented in MatConvNet and trained on the MNIST data set (60,000 training images of handwritten digits). The versions of matconvnet and vlfeat used are included in this directory to ensure consistency. To use the code first place all the files from \cite{MNIST} in a directory named ``data'' in this directory. To run the training process simply call mnist\_train, this will take around one day as it trains 5 networks over a 5 times expanded version of the data set, each for 40 epochs. Training is done using 95\% of the expanded MNIST dataset, with 5\% withheld for validation, which was run after each epoch.
 
 The network architecture consisted of the following layers in order of application:
 \begin{itemize}
@@ -24,9 +24,9 @@ The network architecture consisted of the following layers in order of applicati
 \item Softmax output layer with 10 outputs corresponding to the 10 MNIST digit classes
 \end{itemize}
 
-All convolutional layers had stride 1 and no padding was used. The training data was augmented to 5 times the size by offseting each example by a single pixel in each cardinal direction. Training proceeded for 40 epochs with weight-decay of 0.1 and learning rate of 0.001. This learning rate is the one notable difference between the procedure outlined in \cite{SRC} and the one applied here. The learning rate used in \cite{SRC} was given as 0.03, however this learning rate was found to be too high in that it produced essentially no noticable improvement to the network after running for a full epoch, while the lower one actually used resulted in error a validation error of only 1.5\% after one epoch, and very good results after the full 40 (reported below).
+All convolutional layers had stride 1 and no padding was used. The training data was augmented to 5 times the size by offsetting each example by a single pixel in each cardinal direction. Training proceeded for 40 epochs with weight-decay of 0.1 and learning rate of 0.001. This learning rate is the one notable difference between the procedure outlined in \cite{SRC} and the one applied here. The learning rate used in \cite{SRC} was given as 0.03, however this learning rate was found to be too high in that it produced essentially no noticeable improvement to the network after running for a full epoch. The reason for this is unknown since it obviously worked well for the author of \cite{SRC}, it may perhaps have been due to some subtle differences in either the software or hardware used (for example the way matconvnet preforms some mathematical operation). The lower learning rate actually used resulted in a validation error of only 1.5\% after one epoch, and very good results after the full 40 (reported below).
 
-The script cnn\_train.m found in the MatConvNet examples was used to train the networks used with momentum set to 0 in agreement with \cite{SRC}. 5 networks all matching the above description were trained in total and their average prediction taken as the prediction at test time, as specified in \cite{SRC}.
+The script cnn\_train.m found in the MatConvNet examples was used to train the networks used with momentum set to 0, in agreement with \cite{SRC}. 5 networks all matching the above description were trained in total and their average prediction taken as the prediction at test time, as specified in \cite{SRC}.
 
 To run the testing process call mnist\_test(nets) where ``nets'' is an ensemble (cell array) of networks output by the training script. A pretrained network ensemble is included in the file networks.mat which will load in the variable ``nets''  for use in the test script.
 
@@ -41,12 +41,20 @@ The average accuracy using each of the 5 trained networks individually was 99.28
 
 Figure 1 shows the learning curve for one of the 5 trained networks, including both the value of the cost function and the error rate for both the training and validation set.
 
+Figure 2 shows the full set of misclassified examples, each one titles with l:(true label), c:(network classification).
 
+\begin{figure}[!ht]
+  \caption{misclassified examples}
+  \centering
+    \includegraphics[width=0.9\textwidth]{misclassified.jpg}
+\end{figure}
 
 \section{Discussion}
-The discrepancy between the obtained accuracy and that reported from \cite{SRC} may be partially explained by the difference in learning rate, which was reduced from the reported value (due to lack of improvement) without changing the number of training epochs. This is somewhat supported by figure 1 which suggests that the objective function may have still been droppping slightly when training was stopped at the 40th epoch. Ideally learning would have been allowed to continue, until clear convergence was observed. 
+The discrepancy between the obtained accuracy and that reported from \cite{SRC} may be partially explained by the difference in learning rate, which was reduced from the reported value (due to lack of improvement as discussed above) without changing the number of training epochs. This is somewhat supported by figure 1 which suggests that the objective function may have still been dropping slightly when training was stopped at the 40th epoch. Ideally learning would have been allowed to continue until clear convergence was observed. 
 
-Nonetheless the descrepency in the obtained accuracy is probably not that far off the variance in of the method itself. This is somewhat evident in looking at the individual accuracy in the 5 trained networks which ranged from 99.17\% to 99.43\%.
+Nonetheless the discrepancy in the obtained accuracy is probably not that far off the variance of the method itself. This is somewhat evident in looking at the individual accuracy in the 5 trained networks which ranged from 99.17\% to 99.43\%.
+
+By and large, comparing the misclassified examples shown in figure 2 with the misclassifications shown in \cite{SRC} show that our model made most of the same mistakes, along with a few others. Notably our model seems have some trouble distinguishing between crossed 7s and 2s, which theirs seems to have learned well. 
 
 
 \begin{thebibliography}{10}

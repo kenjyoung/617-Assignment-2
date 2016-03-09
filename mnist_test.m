@@ -27,7 +27,25 @@ function [accuracy] = mnist_test(nets)
     class = mode(class,4);
     class = reshape(class,size(labels));
     class = class-1;
+    nnz(class~=labels)
     accuracy = nnz(class==labels)/size(labels,1);
+    
+    figure;
+    wrong_images = images(:,:,class~=labels);
+    given_labels = labels(class~=labels);
+    true_class = class(class~=labels);
+    rows = ceil(sqrt(size(wrong_images,3)));
+    for i=1:size(wrong_images,3)
+        image = wrong_images(:,:,i)/255;
+        I = subplot(rows,rows, i);
+        subimage(image);
+        %set(I,'Position',[mod(i,rows)/rows,floor(i/rows)/rows,0.9/rows,0.9/rows])
+        axis off
+        title(sprintf('l:%d, c:%d',given_labels(i),true_class(i)))
+    end
+    
+    
+    
     fprintf('Overall test set accuracy: %.4f\n',accuracy);
     
 end
